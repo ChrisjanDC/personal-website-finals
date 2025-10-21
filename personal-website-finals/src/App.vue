@@ -29,8 +29,8 @@ body {
 
 h1 {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 0px;
   font-size: 2.5em;
-  color: #2563eb;
+  color: #000000ff;
 }
 </style>

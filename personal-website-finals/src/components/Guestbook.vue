@@ -67,15 +67,15 @@ async function addMessage() {
   max-width: 600px;
   margin: 3rem auto;
   padding: 2rem;
-  background-color: #1f2937; /* Dark gray card */
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background-color: #ffffffff;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 1);
   text-align: center;
 }
 
 .guestbook h2 {
-  color: #ffffff;
-  font-size: 1.8rem;
+  color: #030303ff;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -91,18 +91,18 @@ textarea {
   padding: 0.75rem;
   border: none;
   border-radius: 8px;
-  background-color: #374151;
-  color: #e5e7eb;
+  background-color: #d0d0d0ff;
+  color: #000000ff;
   font-size: 1rem;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #9ca3af;
+  color: #ffffffff;
 }
 
 button {
-  background-color: #3b82f6;
+  background-color: #9c1a1aff;
   color: white;
   border: none;
   padding: 0.8rem;
@@ -113,7 +113,7 @@ button {
 }
 
 button:hover {
-  background-color: #2563eb;
+  background-color: #e35656ff;
 }
 
 ul {
@@ -123,20 +123,20 @@ ul {
 }
 
 li {
-  background: #111827;
-  border: 1px solid #374151;
+  background: #d0d0d0ff;
+  border: 1px solid #ffffffff;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 0.75rem;
-  color: #d1d5db;
+  color: #434343ff;
   text-align: left;
 }
 
 strong {
-  color: #3b82f6;
+  color: #a00c0cff;
 }
 
-/* ✅ Responsive Design */
+
 @media (max-width: 600px) {
   .guestbook {
     padding: 1.2rem;

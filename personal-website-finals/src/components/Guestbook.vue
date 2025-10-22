@@ -1,159 +1,130 @@
 <template>
-  <div class="guestbook">
+  <section class="guestbook">
     <h2>Guestbook</h2>
-    <form @submit.prevent="addMessage">
-      <input v-model="name" placeholder="Your name" required />
+
+    <form @submit.prevent="submitMessage" class="guestbook-form">
+      <input v-model="name" type="text" placeholder="Your name" required />
       <input v-model="email" type="email" placeholder="Your email" required />
-      <textarea v-model="message" placeholder="Your message"></textarea>
+      <textarea v-model="message" placeholder="Your message" required></textarea>
       <button type="submit">Sign Guestbook</button>
     </form>
 
-    <ul>
-      <li v-for="entry in entries" :key="entry.id">
-        <strong>{{ entry.name }}</strong>: {{ entry.message }}
-        <br />
-        <small>{{ new Date(entry.inserted_at).toLocaleString() }}</small>
-      </li>
-    </ul>
-  </div>
+    <div v-if="messages.length" class="messages">
+      <div v-for="(msg, index) in messages" :key="index" class="message-card">
+        <p><strong>{{ msg.name }}:</strong> {{ msg.message }}</p>
+        <small>{{ msg.date }}</small>
+      </div>
+    </div>
+  </section>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-// Corrected import path for Supabase client
-import { supabase } from '../supabase/supabaseClient.js'
-
-const name = ref('')
-const email = ref('')
-const message = ref('')
-const entries = ref([])
-
-// Load messages when component mounts
-onMounted(async () => {
-  const { data, error } = await supabase
-    .from('guestbook')
-    .select('*')
-    .order('inserted_at', { ascending: false })
-
-  if (!error) {
-    entries.value = data || []
-  } else {
-    console.error('Error loading guestbook:', error)
-  }
-})
-
-// Add message to guestbook
-async function addMessage() {
-  if (!name.value || !email.value || !message.value) return
-
-  const { data, error } = await supabase
-    .from('guestbook')
-    .insert([{ name: name.value, email: email.value, message: message.value }])
-    .select()
-
-  if (!error && data) {
-    entries.value.unshift(data[0])
-    name.value = ''
-    email.value = ''
-    message.value = ''
-  } else {
-    console.error('Error adding message:', error)
-  }
-}
+<script>
+export default {
+  data() {
+    return {
+      name: "",
+      email: "",
+      message: "",
+      messages: JSON.parse(localStorage.getItem("guestbookMessages") || "[]"),
+    };
+  },
+  methods: {
+    submitMessage() {
+      const newMessage = {
+        name: this.name,
+        email: this.email,
+        message: this.message,
+        date: new Date().toLocaleString(),
+      };
+      this.messages.unshift(newMessage);
+      localStorage.setItem("guestbookMessages", JSON.stringify(this.messages));
+      this.name = this.email = this.message = "";
+    },
+  },
+};
 </script>
 
 <style scoped>
 .guestbook {
-  max-width: 600px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background-color: #ffffffff;
-  border-radius: 30px;
-  box-shadow: 0 4px 10px rgba(255, 0, 0, 1);
+  background-color: #ffffff;
+  border: 2px solid #ffdede;
+  border-radius: 40px;
+  padding: 60px 50px;
+  margin: 100px auto;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
   text-align: center;
 }
 
 .guestbook h2 {
-  color: #030303ff;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  font-size: 2em;
+  color: #000;
+  margin-bottom: 25px;
 }
 
-form {
+.guestbook-form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
+  gap: 15px;
+  width: 80%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-input,
-textarea {
-  padding: 0.75rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #d0d0d0ff;
-  color: #000000ff;
-  font-size: 1rem;
+.guestbook-form input,
+.guestbook-form textarea {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  font-size: 1em;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #ffffffff;
-}
-
-button {
-  background-color: #9c1a1aff;
+.guestbook-form button {
+  background-color: #a51515;
   color: white;
+  padding: 14px;
   border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
+  font-weight: bold;
+  font-size: 1.05em;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #e35656ff;
+.guestbook-form button:hover {
+  background-color: #8e1010;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
-}
-
-li {
-  background: #d0d0d0ff;
-  border: 1px solid #ffffffff;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
-  color: #434343ff;
+.messages {
+  margin-top: 40px;
   text-align: left;
+  width: 80%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-strong {
-  color: #a00c0cff;
+.message-card {
+  background-color: #d9d9d9;
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-@media (max-width: 600px) {
-  .guestbook {
-    padding: 1.2rem;
-    margin: 1rem;
-  }
-
-  input,
-  textarea,
-  button {
-    font-size: 0.9rem;
-  }
+.message-card p {
+  margin: 0;
 }
-</style>
 
-<style>
-body {
-  background-color: white;
-  color: black;
+.message-card strong {
+  color: #a51515;
+}
+
+.message-card small {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: #555;
 }
 </style>

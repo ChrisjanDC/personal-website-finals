@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-// ✅ Corrected import path for Supabase client
+// Corrected import path for Supabase client
 import { supabase } from '../supabase/supabaseClient.js'
 
 const name = ref('')

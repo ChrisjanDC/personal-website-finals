@@ -3,18 +3,21 @@
     <h1>Welcome to My Personal Website</h1>
     <AboutSection />
     <Guestbook />
+    <Footer />
   </div>
 </template>
 
 <script>
 import AboutSection from './components/AboutSection.vue'
 import Guestbook from './components/Guestbook.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     AboutSection,
-    Guestbook
+    Guestbook,
+    Footer
   }
 }
 </script>
